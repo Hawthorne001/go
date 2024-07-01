@@ -185,11 +185,6 @@ Go 1.23 changed the behavior of
 serial numbers that are negative. This change can be reverted with
 the [`x509negativeserial` setting](/pkg/crypto/x509/#ParseCertificate).
 
-Go 1.23 changed the behavior of
-[crypto/x509.ParseCertificate](/pkg/crypto/x509/#ParseCertificate) to reject
-serial numbers that are longer than 20 octets. This change can be reverted with
-the [`x509seriallength` setting](/pkg/crypto/x509/#ParseCertificate).
-
 Go 1.23 re-enabled support in html/template for ECMAScript 6 template literals by default.
 The [`jstmpllitinterp` setting](/pkg/html/template#hdr-Security_Model) no longer has
 any effect.
@@ -204,6 +199,15 @@ Leaf field of the returned [`tls.Certificate`](/pkg/crypto/tls#Certificate).
 This behavior is controlled by the `x509keypairleaf` setting. For Go 1.23, it
 defaults to `x509keypairleaf=1`. Previous versions default to
 `x509keypairleaf=0`.
+
+Go 1.23 changed
+[`net/http.ServeContent`](/pkg/net/http#ServeContent),
+[`net/http.ServeFile`](/pkg/net/http#ServeFile), and
+[`net/http.ServeFS`](/pkg/net/http#ServeFS) to
+remove Cache-Control, Content-Encoding, Etag, and Last-Modified headers
+when serving an error. This behavior is controlled by
+the [`httpservecontentkeepheaders` setting](/pkg/net/http#ServeContent).
+Using `httpservecontentkeepheaders=1` restores the pre-Go 1.23 behavior.
 
 ### Go 1.22
 
@@ -325,6 +329,13 @@ There is no plan to remove any of these settings.
 
 Go 1.19 made it an error for path lookups to resolve to binaries in the current directory,
 controlled by the [`execerrdot` setting](/pkg/os/exec#hdr-Executables_in_the_current_directory).
+There is no plan to remove this setting.
+
+Go 1.19 started sending EDNS0 additional headers on DNS requests.
+This can reportedly break the DNS server provided on some routers,
+such as CenturyLink Zyxel C3000Z.
+This can be changed by the [`netedns0` setting](/pkg/net#hdr-Name_Resolution).
+This setting is available in Go 1.21.12, Go 1.22.5, Go 1.23, and later.
 There is no plan to remove this setting.
 
 ### Go 1.18
